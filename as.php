@@ -29,7 +29,7 @@ $data = [
     'domain' => $domain
 ];
 
-$ch = curl_init('http://127.0.0.1/index.php/api/stat/collect');
+$ch = curl_init('http://127.0.0.1/index.php?s=/api/stat/collect');
 
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_POST, true);
