@@ -8,7 +8,7 @@ $data = [
     'time'   => $time
 ];
 
-$ch = curl_init('http://10.163.17.203/api/api/stat/collect');
+$ch = curl_init('http://10.163.17.203/api/stat/collect');
 
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_POST, true);
