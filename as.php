@@ -17,6 +17,6 @@ curl_setopt($ch, CURLOPT_TIMEOUT, 5);
 
 $response = curl_exec($ch);
 curl_close($ch);
-file_put_contents('/stat.log', "domain={$domain}, time={$time}\n", FILE_APPEND);
+file_put_contents(__DIR__ . '/stat.log', "domain={$domain}, time={$time}\n", FILE_APPEND);
 // echo 'ok';
 return;
