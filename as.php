@@ -24,14 +24,12 @@
 
 
 $domain = $_SERVER['HTTP_HOST'] ?? 'unknown';
-$time = date('Y-m-d H:i:s');
 
 $data = [
-    'domain' => $domain,
-    'time'   => $time
+    'domain' => $domain
 ];
 
-$ch = curl_init('http://127.0.0.1/api/stat/collect');
+$ch = curl_init('http://127.0.0.1/index.php/api/stat/collect');
 
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_POST, true);
