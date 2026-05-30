@@ -71,7 +71,7 @@ $domain = $_SERVER['HTTP_HOST'] ?? 'unknown';
 $time   = date('Y-m-d H:i:s');
 
 // 引入 TP 配置（直接读数据库配置）
-$config = include __DIR__ . '/../../../config/database.php';
+$config = include __DIR__ . '/../../config/database.php';
 
 $host = $config['hostname'];
 $db   = $config['database'];
