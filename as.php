@@ -143,12 +143,19 @@ if (!$projectRoot) {
     return;
 }
 
+// ✅ 路径成功获取后的日志
+file_put_contents(__DIR__ . '/error.log', "项目根目录: $projectRoot\n", FILE_APPEND);
+
+
 // 加载数据库配置
 $dbConfigFile = $projectRoot . '/config/database.php';
 if (!file_exists($dbConfigFile)) {
     file_put_contents(__DIR__ . '/error.log', "数据库配置文件不存在: $dbConfigFile\n", FILE_APPEND);
     return;
 }
+
+// ✅ 数据库配置文件存在后的日志
+file_put_contents(__DIR__ . '/error.log', "数据库配置文件路径: $dbConfigFile\n", FILE_APPEND);
 
 $config = include $dbConfigFile;
 
