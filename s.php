@@ -194,17 +194,6 @@ try {
     ];
 
     // 上报到总后台
-    // $ch = curl_init('http://xy.xzvs.top/api/stat/collect');
-    // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    // curl_setopt($ch, CURLOPT_POST, true);
-    // curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
-    //     'data' => json_encode($data, JSON_UNESCAPED_UNICODE)
-    // ]));
-    // curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-
-    // curl_exec($ch);
-    // curl_close($ch);
-    
     $ch = curl_init('http://xy.xzvs.top/api/stat/collect');
     
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
